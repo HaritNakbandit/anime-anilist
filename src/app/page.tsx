@@ -39,7 +39,7 @@ export default function Home() {
       optionYear[0]
   );
   const [selectSeason, setSelectSeason] = useState<Options>(
-    optionYear.find((i) => i.value === searchParams.get("season")) ??
+    optionSeason.find((i) => i.value === searchParams.get("season")) ??
       optionSeason[0]
   );
 
