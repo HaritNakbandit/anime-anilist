@@ -32,7 +32,8 @@ const Card = (props: Props) => {
               gutterBottom
               variant="body2"
               color="primary"
-              className="font-semibold m-0"
+              sx={{ margin: 0 }}
+              className="font-semibold"
             >
               {props.score}
             </Typography>
