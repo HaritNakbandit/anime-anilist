@@ -1,7 +1,8 @@
+import { Suspense } from "react";
 import PageLayout from "@/components/layout/PageLayout";
 import { ApolloWrapper } from "../lib/apolloWrapper";
 import Theme from "@/theme/Theme";
-import './globals.css';
+import "./globals.css";
 
 export default function RootLayout({
   children,
@@ -10,10 +11,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body >
+      <body>
         <ApolloWrapper>
           <Theme>
-            <PageLayout>{children}</PageLayout>
+            <Suspense>
+              <PageLayout>{children}</PageLayout>
+            </Suspense>
           </Theme>
         </ApolloWrapper>
       </body>
