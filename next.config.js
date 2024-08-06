@@ -1,5 +1,8 @@
-const isProd = process.env.NODE_ENV === 'production';
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  basePath: "/anime-anilist",
+  output: "export",
   reactStrictMode: true,
-  assetPrefix: isProd ? 'anime-anilist' : '',
 };
+
+module.exports = nextConfig;
