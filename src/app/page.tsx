@@ -188,7 +188,7 @@ export default function Home() {
             <CardLoading key={`animate-card-loading-${index + 1}`} />
           ))}
       </div>
-      {dataList?.length <= 0 ? (
+      {!loading && dataList?.length <= 0 ? (
         <Typography variant="h5" align="center">
           No Results
         </Typography>
