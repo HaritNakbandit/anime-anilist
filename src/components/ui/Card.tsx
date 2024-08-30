@@ -10,7 +10,7 @@ interface Props {
 
 const Card = (props: Props) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col items-center sm:items-start">
       <div className="relative cursor-pointer hover:scale-105 duration-300">
         <Box
           component="img"
@@ -44,7 +44,7 @@ const Card = (props: Props) => {
         gutterBottom
         variant="body2"
         color="primary"
-        className="py-2 font-semibold"
+        className="py-2 font-semibold text-center	sm:text-start	"
       >
         {props.title}
       </Typography>

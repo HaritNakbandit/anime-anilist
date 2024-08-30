@@ -12,7 +12,7 @@ export const GET_MEDIA = gql`
   ) {
     Page(page: $page, perPage: $limit) {
       pageInfo {
-        lastPage
+        hasNextPage
       }
       media(
         search: $search
@@ -28,8 +28,6 @@ export const GET_MEDIA = gql`
         title {
           romaji
           english
-          native
-          userPreferred
         }
         description
         siteUrl

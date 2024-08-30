@@ -1,15 +1,33 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_MEDIA } from "@/api/gql";
-import { Divider, Typography } from "@mui/material";
+import { Button, Divider, Typography } from "@mui/material";
 import { Input, InputSelect, Card, CardLoading } from "@/components/ui";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface Options {
   label: string;
   value: string;
+}
+
+interface CoverImageData {
+  extraLarge: string;
+}
+
+interface TitleData {
+  romaji: string;
+  english: string;
+}
+
+interface MediaData {
+  id: string;
+  coverImage: CoverImageData;
+  title: TitleData;
+  description: string;
+  siteUrl: string;
+  averageScore: number;
 }
 
 let optionYear: Options[] = [];
@@ -30,7 +48,8 @@ export default function Home() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  // const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(1);
+  const [dataList, setDataList] = useState<MediaData[]>([]);
   const [inputSearch, setInputSearch] = useState<string>(
     searchParams.get("search") ?? ""
   );
@@ -42,6 +61,11 @@ export default function Home() {
     optionSeason.find((i) => i.value === searchParams.get("season")) ??
       optionSeason[0]
   );
+
+  const handleClearData = () => {
+    setPage(1);
+    setDataList([]);
+  };
 
   const handleChange = (value: string, setState: Function, field: string) => {
     setState(value);
@@ -70,6 +94,7 @@ export default function Home() {
       const params = new URLSearchParams(searchParams.toString());
       params.set(name, value);
       router.push(pathname + "?" + params.toString());
+      handleClearData();
     },
     [pathname, router, searchParams]
   );
@@ -79,6 +104,7 @@ export default function Home() {
       const params = new URLSearchParams(searchParams.toString());
       params.delete(field);
       router.replace(`${pathname}?${params.toString()}`);
+      handleClearData();
     },
     [pathname, router, searchParams]
   );
@@ -86,7 +112,7 @@ export default function Home() {
   const { loading, data } = useQuery(GET_MEDIA, {
     variables: {
       limit: 24,
-      page: 1,
+      page: page,
       year: Number(selectYear?.value),
       season: selectSeason?.value,
       search: !!inputSearch ? inputSearch : undefined,
@@ -94,6 +120,12 @@ export default function Home() {
       sort: "POPULARITY_DESC",
     },
   });
+
+  useEffect(() => {
+    if (data?.Page?.media?.length > 0) {
+      setDataList((prev) => [...prev, ...data?.Page?.media]);
+    }
+  }, [data]);
 
   return (
     <main className="flex min-h-screen flex-col items-center p-8">
@@ -135,24 +167,41 @@ export default function Home() {
         className="w-full opacity-10"
       />
       <div className="inline-grid sm:grid-cols-3 lg:grid-cols-6 gap-8 pt-6">
-        {loading
+        {loading && dataList?.length <= 0
           ? Array.from(new Array(12))?.map((_, index: number) => (
               <CardLoading key={`animate-card-loading-${index + 1}`} />
             ))
-          : (data?.Page?.media ?? [])?.map((item: any) => (
-              <Card
-                key={`animate-card-${item.id}`}
-                imgSrc={item?.coverImage?.extraLarge}
-                onClick={() => (window.location.href = item?.siteUrl)}
-                title={item?.title?.english ?? item?.title?.romaji}
-                score={item?.averageScore / 10}
-              />
+          : (dataList ?? [])?.map((item: MediaData) => (
+              <>
+                <Card
+                  key={`animate-card-${item.id}`}
+                  imgSrc={item?.coverImage?.extraLarge}
+                  onClick={() => (window.location.href = item?.siteUrl)}
+                  title={item?.title?.english ?? item?.title?.romaji}
+                  score={item?.averageScore / 10}
+                />
+              </>
             ))}
+        {loading &&
+          dataList?.length > 0 &&
+          Array.from(new Array(12))?.map((_, index: number) => (
+            <CardLoading key={`animate-card-loading-${index + 1}`} />
+          ))}
       </div>
-      {data?.Page?.media?.length <= 0 && (
+      {dataList?.length <= 0 ? (
         <Typography variant="h5" align="center">
           No Results
         </Typography>
+      ) : (
+        <Button
+          variant="contained"
+          disabled={!data?.Page?.pageInfo?.hasNextPage}
+          onClick={() => {
+            setPage((prev) => prev + 1);
+          }}
+        >
+          More
+        </Button>
       )}
     </main>
   );
