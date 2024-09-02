@@ -25,26 +25,28 @@ const Card = (props: Props) => {
           className="drop-shadow-xl "
           onClick={() => props.onClick()}
         />
-        <div className="left-2 bottom-2 z-10 absolute bg-zinc-300 px-[4px] py-[2px] rounded opacity-80">
-          <div className="flex flex-row items-center">
-            <StarIcon sx={{ fontSize: 15 }} />
-            <Typography
-              gutterBottom
-              variant="body2"
-              color="primary"
-              sx={{ margin: 0 }}
-              className="font-semibold"
-            >
-              {props.score}
-            </Typography>
+        {props.score > 0 && (
+          <div className="left-2 bottom-2 z-10 absolute bg-white/[.6] px-[4px] py-[2px] rounded-xl">
+            <div className="flex flex-row items-center">
+              <StarIcon sx={{ fontSize: 15 }} />
+              <Typography
+                gutterBottom
+                variant="body2"
+                color="primary"
+                sx={{ margin: 0 }}
+                className="font-semibold"
+              >
+                {props.score.toFixed(1)}
+              </Typography>
+            </div>
           </div>
-        </div>
+        )}
       </div>
       <Typography
         gutterBottom
         variant="body2"
         color="primary"
-        className="py-2 font-semibold text-center	sm:text-start	"
+        className="py-2 font-semibold text-center	sm:text-start"
       >
         {props.title}
       </Typography>
