@@ -254,16 +254,10 @@ export default function Home() {
             )
           )}
       </div>
-
-      {/* Pagination / Empty state */}
       {!loading && dataList?.length <= 0 ? (
-        <div className="flex flex-col items-center gap-2 py-16 text-center">
-          <Search className="h-12 w-12 text-navy-textSecondary dark:text-navyDark-textSecondary" aria-hidden="true" />
-          <h3 className="text-xl font-semibold text-navy-textPrimary dark:text-navyDark-textPrimary">No Results</h3>
-          <p className="text-sm text-navy-textSecondary dark:text-navyDark-textSecondary">
-            Try a different search term, year, or season.
-          </p>
-        </div>
+        <Typography variant="h5" align="center">
+          No Results
+        </Typography>
       ) : (
         <>
           {!loading && hasNextPage && (
