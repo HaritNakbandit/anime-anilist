@@ -169,7 +169,7 @@ export default function AnimeDetailPage() {
           <img
             src={media.coverImage.extraLarge}
             alt={title}
-            className="mx-auto w-[200px] shrink-0 rounded-xl shadow-lg md:mx-0"
+            className="mx-auto w-[200px] shrink-0 self-start rounded-xl shadow-lg md:mx-0"
           />
         )}
 
