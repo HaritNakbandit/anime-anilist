@@ -1,80 +1,50 @@
 "use client";
 
 import React, { useState, useMemo, createContext, useEffect } from "react";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-export const ColorModeContext = createContext({ toggleColorMode: () => {} });
+type ThemeContextValue = {
+  mode: Mode;
+  toggleColorMode: () => void;
+};
+
+export type { ThemeContextValue };
+
+export const ColorModeContext = createContext<ThemeContextValue>({
+  mode: "light",
+  toggleColorMode: () => {},
+});
+
+type Mode = "light" | "dark";
 
 const Theme = (props: { children: React.ReactNode }) => {
   const { children } = props;
 
-  const [mode, setMode] = useState<string>("light");
+  // Always start as "light" so SSR HTML and client hydration match.
+  // The pre-hydration script in layout.tsx applies the saved theme to <html>
+  // before React renders; we sync state after mount via useEffect below.
+  const [mode, setMode] = useState<Mode>("light");
 
-  const colorMode = useMemo(
+  const colorMode = useMemo<ThemeContextValue>(
     () => ({
+      mode,
       toggleColorMode: () => {
-        localStorage.settItem(
-          "theme",
-          localStorage.getItem("theme") === "light" ? "dark" : "light"
-        );
-        setMode(localStorage.getItem("theme") ?? "light");
+        const nextTheme: Mode = mode === "light" ? "dark" : "light";
+        localStorage.setItem("theme", nextTheme);
+        document.documentElement.classList.toggle("dark", nextTheme === "dark");
+        setMode(nextTheme);
       },
     }),
-    []
-  );
-
-  useEffect(() => {
-    const theme = localStorage.getItem("theme") ?? "light";
-    setMode(theme);
-    localStorage.setItem("theme", theme);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          ...(mode === "light"
-            ? {
-                // palette values for light mode
-                primary: {
-                  main: "#142850",
-                },
-                divider: "#142850",
-                background: {
-                  default: "#EDF7FA",
-                  paper: "#ffffff",
-                },
-                text: {
-                  primary: "#142850",
-                  secondary: "#ffffff",
-                },
-              }
-            : {
-                // palette values for dark mode
-                primary: {
-                  main: "#ffffff",
-                },
-                divider: "#ffffff",
-                background: {
-                  default: "#202124",
-                  paper: "#171717",
-                },
-                text: {
-                  primary: "#ffffff",
-                  secondary: "#000000",
-                },
-              }),
-        },
-      }),
     [mode]
   );
 
-  return (
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>{children}</ThemeProvider>
-    </ColorModeContext.Provider>
-  );
+  // Sync React state with the theme applied by the pre-hydration script.
+  // Runs after hydration so it won't cause a mismatch warning.
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains("dark");
+    setMode(isDark ? "dark" : "light");
+  }, []);
+
+  return <ColorModeContext.Provider value={colorMode}>{children}</ColorModeContext.Provider>;
 };
 
 export default Theme;

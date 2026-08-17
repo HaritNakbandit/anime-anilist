@@ -1,16 +1,11 @@
-"use client";
-
 import HeaderBar from "./HeaderBar";
 import Footer from "./Footer";
-import { Box } from "@mui/material";
 
-const PageLayout = (props: { children: React.ReactNode }) => {
-  const { children } = props;
-  const headerBarHeight = 64;
+const PageLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>
+    <div className="flex flex-col">
       <HeaderBar />
-      <Box sx={{ mt: `${headerBarHeight}px` }}>{children}</Box>
+      <main className="mt-[64px] flex-1">{children}</main>
       <Footer />
     </div>
   );
