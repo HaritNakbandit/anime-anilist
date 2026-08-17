@@ -59,7 +59,7 @@ const CardDetailed = ({ item }: Props) => {
 
   return (
     <Link
-      href={`/anime/${id}`}
+      href={`/anime?id=${id}`}
       className="flex w-full cursor-pointer flex-col overflow-hidden rounded-xl border border-navy-border bg-white shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg dark:border-navyDark-border dark:bg-navyDark-paper"
     >
       <div className="border-b border-navy-border bg-navy-primary px-4 py-3 text-center dark:border-navyDark-border dark:bg-black/40">
