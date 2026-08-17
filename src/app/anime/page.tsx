@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@apollo/client/react";
 import { GET_MEDIA_DETAIL } from "@/api/gql";
 import { Star, Clock, CalendarDays, Users, Tv, ExternalLink, ChevronLeft } from "lucide-react";
@@ -33,9 +33,10 @@ const StatCard = ({ label, value }: { label: string; value: React.ReactNode }) =
 );
 
 export default function AnimeDetailPage() {
-  const params = useParams();
+  const searchParams = useSearchParams();
   const router = useRouter();
-  const id = typeof params?.id === "string" ? Number(params.id) : undefined;
+  const idParam = searchParams.get("id");
+  const id = idParam ? Number(idParam) : undefined;
 
   const { loading, error, data } = useQuery(GET_MEDIA_DETAIL, {
     variables: { id },
@@ -168,7 +169,7 @@ export default function AnimeDetailPage() {
           <img
             src={media.coverImage.extraLarge}
             alt={title}
-            className="mx-auto w-[200px] shrink-0 rounded-xl shadow-lg md:mx-0"
+            className="mx-auto w-[200px] shrink-0 self-start rounded-xl shadow-lg md:mx-0"
           />
         )}
 
@@ -223,7 +224,7 @@ export default function AnimeDetailPage() {
           {nextSeasonId && nextSeasonTitle && (
             <div className="flex items-center gap-2 text-sm">
               <span className="font-semibold text-navy-textSecondary dark:text-navyDark-textSecondary">Next season:</span>
-              <Link href={`/anime/${nextSeasonId}`} className="font-medium text-navy-primary underline hover:no-underline dark:text-navyDark-primary">
+              <Link href={`/anime?id=${nextSeasonId}`} className="font-medium text-navy-primary underline hover:no-underline dark:text-navyDark-primary">
                 {nextSeasonTitle}
               </Link>
             </div>

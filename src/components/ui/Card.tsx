@@ -15,7 +15,7 @@ const Card = ({ item }: Props) => {
   const score = averageScore ? averageScore / 10 : undefined;
 
   return (
-    <Link href={`/anime/${id}`} className="group relative block w-full cursor-pointer">
+    <Link href={`/anime?id=${id}`} className="group relative block w-full cursor-pointer">
       <div className="overflow-hidden rounded-xl border border-navy-border bg-white shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg dark:border-navyDark-border dark:bg-navyDark-paper">
         <img
           src={coverImage?.extraLarge}
