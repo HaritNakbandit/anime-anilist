@@ -1,35 +1,17 @@
-import React from "react";
-import { styled } from "@mui/system";
-import { IconButton } from "@mui/material";
-import GitHubIcon from "@mui/icons-material/GitHub";
+import { FaGithub } from "react-icons/fa";
 
-const FooterWrapper = styled("div")(({ theme }) => {
-  return {
-    height: "60px",
-    backgroundColor: theme.palette.background.paper,
-    padding: "10px",
-  };
-});
-
-
-const FooterContact = styled("div")({
-  display: "flex",
-  justifyContent: "center",
-  gap: "1rem",
-});
-
-const Footer = () => {
+export default function Footer() {
   return (
-    <FooterWrapper id="contact">
-      <FooterContact>
-        <IconButton
-          onClick={() => window.open("https://github.com/HaritNakbandit")}
-        >
-          <GitHubIcon />
-        </IconButton>
-      </FooterContact>
-    </FooterWrapper>
+    <footer className="flex h-[64px] w-full items-center justify-center border-t border-navy-border text-navy-textSecondary transition-colors hover:text-navy-primary dark:border-navyDark-border dark:text-navyDark-textSecondary dark:hover:text-navyDark-primary">
+      <a 
+        href="https://github.com/HaritNakbandit" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        aria-label="GitHub"
+        className="transition-colors hover:text-navy-primary dark:hover:text-navyDark-primary"
+      >
+        <FaGithub className="h-6 w-6" />
+      </a>
+    </footer>
   );
-};
-
-export default Footer;
+}

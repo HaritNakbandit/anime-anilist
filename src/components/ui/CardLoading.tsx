@@ -1,21 +1,12 @@
-import { Skeleton } from "@mui/material";
-
 interface Props {}
 
-const CardLoading = (props: Props) => {
+const CardLoading = () => {
   return (
-    <div className="flex flex-col" >
-      <Skeleton
-        variant="rectangular"
-        sx={{
-          height: "300px",
-          aspectRatio: 61 / 75,
-          borderRadius: "5px",
-          objectFit: "fill",
-        }}
-      />
-      <Skeleton className="py-2" />
-    </div>
+    <div
+      className="w-full animate-pulse overflow-hidden rounded-xl border border-navy-border bg-navy-border dark:border-navyDark-border dark:bg-navyDark-border"
+      style={{ aspectRatio: "61/75" }}
+    ></div>
   );
 };
+
 export default CardLoading;
